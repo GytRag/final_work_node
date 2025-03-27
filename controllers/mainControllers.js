@@ -322,9 +322,11 @@ module.exports = {
                 {$or: [{userOne_id: messTo._id}, {userTwo_id: messTo._id}]})
 
             const userOnline = usersOnline.getUser(messTo._id)
-            const mySocket = usersOnline.getUser(user._id)
 
-            if (userOnline) io.to(userOnline.socket_id).emit("getChat", sendChat)
+            if (userOnline) {
+                io.to(userOnline.socket_id).emit("getChat", sendChat)
+                io.to(userOnline.socket_id).emit("newChat", sendChat)
+            }
 
             return res.send({message: 'message sent', success: true})
         }
@@ -342,7 +344,10 @@ module.exports = {
             const userOnline = usersOnline.getUser(messTo._id)
             const mySocket = usersOnline.getUser(user._id)
 
-            if (userOnline) io.to(userOnline.socket_id).emit("gotMessage", find)
+            if (userOnline) {
+                io.to(userOnline.socket_id).emit("gotMessage", find)
+                io.to(userOnline.socket_id).emit("newMessage", find)
+            }
             io.to(mySocket.socket_id).emit("sendMessage", find)
 
             return res.send({message: 'message sent', success: true})
