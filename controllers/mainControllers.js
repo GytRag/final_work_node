@@ -324,26 +324,23 @@ module.exports = {
             if (userOnline) io.to(userOnline.socket_id).emit("getChat", sendMessage)
             io.to(mySocket.socket_id).emit("sendChat", sendMessage)
 
-            return res.send({message: 'message sent', success: true, sendMessage})
+            return res.send({message: 'message sent', success: true})
         }
 
         if (existChat) {
             const chat = existChat.messages
             chat.push(newMessage)
 
-            await messageSchema.findOneAndUpdate(
+            const find = await messageSchema.findOneAndUpdate(
                 {$or: [{userOne_id: user._id, userTwo_id: messTo._id}, {userTwo_id: user._id, userOne_id: messTo._id}]},
-                {$set: {messages: chat}}
+                {$set: {messages: chat}},
+                {new: true}
             )
-
-            const find = await messageSchema.findOne({$or: [{userOne_id: user._id, userTwo_id: messTo._id}, {userTwo_id: user._id, userOne_id: messTo._id}]})
 
             const userOnline = usersOnline.getUser(messTo._id)
             const mySocket = usersOnline.getUser(user._id)
 
-            if (userOnline) {
-                io.to(userOnline.socket_id).emit("gotMessage", find)
-            }
+            if (userOnline) io.to(userOnline.socket_id).emit("gotMessage", find)
             io.to(mySocket.socket_id).emit("sendMessage", find)
 
             return res.send({message: 'message sent', success: true})
@@ -355,36 +352,29 @@ module.exports = {
 
         const {user} = req.body
 
-
         const existChat = await messageSchema.find(
             {$or: [{userOne_id: user._id}, {userTwo_id: user._id}]})
-
 
         return res.send({message: 'message sent', success: true, existChat})
 
     },
     deleteMessage: async (req, res) => {
 
-        const {user, chat_id, mess} = req.body
+        const {user, chat_id, chatToSend} = req.body
 
-        const existChat = await messageSchema.findOne({_id: chat_id})
-
-        let messages = existChat.messages
-
-        messages = messages.filter(filt => filt.timestamp !== mess.timestamp)
         const updateChat = await messageSchema.findOneAndUpdate({_id: chat_id},
-            {$set: {messages}})
-
+            {$set: {messages: chatToSend}},
+            {new: true})
         let getter_id = null
-        if (existChat.userOne_id === user._id) getter_id = existChat.userTwo_id
-        if (existChat.userOne_id !== user._id) getter_id = existChat.userOne_id
+        if (updateChat.userOne_id === user._id) getter_id = updateChat.userTwo_id
+        if (updateChat.userOne_id !== user._id) getter_id = updateChat.userOne_id
 
         const userOnline = usersOnline.getUser(getter_id)
         const mySocket = usersOnline.getUser(user._id)
-        if (userOnline) io.to(userOnline.socket_id).emit("gotMessage", messages)
-        io.to(mySocket.socket_id).emit("sendMessage", messages)
+        if (userOnline) io.to(userOnline.socket_id).emit("gotMessage", updateChat)
+        io.to(mySocket.socket_id).emit("sendMessage", updateChat)
 
-        return res.send({message: 'message deleted', success: true, updateChat})
+        return res.send({message: 'message deleted', success: true})
 
     },
     deleteChat: async (req, res) => {
