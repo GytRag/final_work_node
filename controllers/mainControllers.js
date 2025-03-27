@@ -318,11 +318,13 @@ module.exports = {
             const newChat = new messageSchema(sendMessage);
             await newChat.save()
 
+            const sendChat = await messageSchema.find(
+                {$or: [{userOne_id: messTo._id}, {userTwo_id: messTo._id}]})
+
             const userOnline = usersOnline.getUser(messTo._id)
             const mySocket = usersOnline.getUser(user._id)
 
-            if (userOnline) io.to(userOnline.socket_id).emit("getChat", sendMessage)
-            io.to(mySocket.socket_id).emit("sendChat", sendMessage)
+            if (userOnline) io.to(userOnline.socket_id).emit("getChat", sendChat)
 
             return res.send({message: 'message sent', success: true})
         }
@@ -379,9 +381,22 @@ module.exports = {
     },
     deleteChat: async (req, res) => {
 
-        const {chat_id} = req.body
+        const {chat, user} = req.body
+        await messageSchema.findOneAndDelete({_id: chat._id})
 
-        await messageSchema.findOneAndDelete({_id: chat_id})
+        let getter_id = null
+        if (chat.userOne_id === user._id) getter_id = chat.userTwo_id
+        if (chat.userOne_id !== user._id) getter_id = chat.userOne_id
+
+        const getterChat = await messageSchema.find(
+            {$or: [{userOne_id: getter_id}, {userTwo_id: getter_id}]})
+        const myChat = await messageSchema.find(
+            {$or: [{userOne_id: user._id}, {userTwo_id: user._id}]})
+
+        const userOnline = usersOnline.getUser(getter_id)
+        const mySocket = usersOnline.getUser(user._id)
+        if (userOnline) io.to(userOnline.socket_id).emit("getDeletedChat", getterChat)
+        io.to(mySocket.socket_id).emit("getDeletedChat", myChat)
 
         return res.send({message: 'chat deleted', success: true})
 
