@@ -31,19 +31,12 @@ io.on("connection", (socket) => {
         io.emit("allUsers", users)
 
     })
+    socket.on("logout", () => {
+        usersOnline.removeUser(socket.id);
 
-    // socket.on("setSelected", item => {
-    //     const myUser = usersOnline.getUserSocket(socket.id)
-    //     let selected = null
-    //     if(item) {
-    //         if(item.userOne_id === myUser._id) selected = item.userTwo_id
-    //         if(item.userOne_id !== myUser._id) selected = item.userOne_id
-    //     }
-    //
-    //     usersOnline.setUserSel(socket.id, selected)
-    //
-    //     io.to(socket.id).emit("getSelected", selected)
-    // })
+        const users = usersOnline.getUsers()
+        io.emit("allUsers", users)
+    })
 
     socket.on("disconnect", () => {
         usersOnline.removeUser(socket.id);
