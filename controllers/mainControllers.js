@@ -40,6 +40,11 @@ module.exports = {
         const result = await bcrypt.compare(password, userExist.password)
         if (!result) return res.send({message: 'bad credentials', success: false})
 
+        const online = usersOnline.getUsers()
+        const userIsOnline = online.find(x => x._id === userExist._id.toString())
+        console.log(userIsOnline)
+        if (userIsOnline) return
+
         let myUser = {
             username: userExist.username,
             image: userExist.image,

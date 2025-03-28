@@ -9,18 +9,14 @@ const io = new Server({
     }
 });
 
-let userSelected = null
-
 io.on("connection", (socket) => {
     console.log("socket start on port 2011")
 //     GETS EVENT FROM FRONT END SOCKET
     socket.on("login", (item) => {
 
-
         const online = usersOnline.getUsers()
         const userExist = online.find(x => x._id === item._id)
         if (userExist) return
-
 
         const user = {
             username: item.username,
