@@ -65,6 +65,12 @@ module.exports = {
             {user_id: user._id},
             {$set: {name: username}})
 
+        await createSchema.updateMany(
+            {"comments._id": {$exists: true}},
+            {$set: {"comments.$[elem].username": username}},
+            {arrayFilters: [{"elem._id": user._id}]}
+        );
+
         await messageSchema.updateMany(
             {userOne_id: user._id},
             {$set: {userOne: username}})
@@ -187,6 +193,7 @@ module.exports = {
         const newComment = {
             comment,
             username: user.username,
+            _id: user._id
         }
 
         const currentPost = await createSchema.findOne({_id: post_id})
