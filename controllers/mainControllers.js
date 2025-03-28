@@ -42,7 +42,6 @@ module.exports = {
 
         const online = usersOnline.getUsers()
         const userIsOnline = online.find(x => x._id === userExist._id.toString())
-        console.log(userIsOnline)
         if (userIsOnline) return
 
         let myUser = {
