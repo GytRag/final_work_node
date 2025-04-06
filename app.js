@@ -23,7 +23,7 @@ mongoose
 app.use(cors());
 app.use(express.json());
 
-app.use('/', mainRouter)
+app.use('/crud', mainRouter)
 
 app.listen(8001);
 console.log('Server started on port 8001');
