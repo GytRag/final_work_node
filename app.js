@@ -19,11 +19,13 @@ mongoose
         console.error(err);
     })
 
-
-app.use(cors());
+app.use(cors({
+    origin: '*', //'http://thecode.lt'
+    credentials: true
+}));
 app.use(express.json());
 
-app.use('/crud', mainRouter)
+app.use('/api/crud', mainRouter)
 
 app.listen(3021);
 console.log('Server started on port 3021');

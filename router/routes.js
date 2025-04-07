@@ -29,34 +29,34 @@ const {
     validateLogin
 } = require('../middleware/validators');
 
-
+const main = '/crud'
 const userAuth = require('../middleware/userAuth');
 
 
-router.get('/allPosts',userAuth, allPosts)
-router.get('/favorite',userAuth, favorite)
+router.get(main + '/allPosts',userAuth, allPosts)
+router.get(main + '/favorite',userAuth, favorite)
 
-router.post('/login',validateLogin, login)
-router.post('/register',validateRegister , register)
+router.post(main + '/login',validateLogin, login)
+router.post(main + '/register',validateRegister , register)
 
-router.post('/updateusername',userAuth , updateUsername)
-router.post('/updatepassword',userAuth , updatePassword)
-router.post('/updateimg',userAuth , updateImg)
+router.post(main + '/updateusername',userAuth , updateUsername)
+router.post(main + '/updatepassword',userAuth , updatePassword)
+router.post(main + '/updateimg',userAuth , updateImg)
 
-router.post('/createPost',userAuth, createPost)
-router.get('/post/:id',userAuth, getPost)
-router.post('/addcomment',userAuth, addComment)
-router.get('/user/:username',userAuth, getUserPosts)
-router.post('/deletepost',userAuth, deletePost)
+router.post(main + '/createPost',userAuth, createPost)
+router.get(main + '/post/:id',userAuth, getPost)
+router.post(main + '/addcomment',userAuth, addComment)
+router.get(main + '/user/:username',userAuth, getUserPosts)
+router.post(main + '/deletepost',userAuth, deletePost)
 
-router.post('/addfavorite',userAuth , addToFavorite)
-router.post('/deletefavorite',userAuth , deleteFavorite)
+router.post(main + '/addfavorite',userAuth , addToFavorite)
+router.post(main + '/deletefavorite',userAuth , deleteFavorite)
 
-router.post('/deleteuser',userAuth , deleteUser)
+router.post(main + '/deleteuser',userAuth , deleteUser)
 
-router.post('/sendmessage',userAuth , sendMessage)
-router.get('/getmessage',userAuth , getMessage)
-router.post('/deletemessage',userAuth , deleteMessage)
-router.post('/deletechat',userAuth , deleteChat)
+router.post(main + '/sendmessage',userAuth , sendMessage)
+router.get(main + '/getmessage',userAuth , getMessage)
+router.post(main + '/deletemessage',userAuth , deleteMessage)
+router.post(main + '/deletechat',userAuth , deleteChat)
 
 module.exports = router;
