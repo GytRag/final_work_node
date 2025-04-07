@@ -10,7 +10,7 @@ const io = new Server({
 });
 
 io.on("connection", (socket) => {
-    console.log("socket start on port 2011")
+    console.log("socket start on port 3011")
 //     GETS EVENT FROM FRONT END SOCKET
     socket.on("login", (item) => {
 

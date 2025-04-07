@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const sockets = require('./modules/sockets')
-sockets.listen(2011);
+sockets.listen(3011);
 
 mongoose
     .connect(process.env.MONGO_KEY)
@@ -25,8 +25,8 @@ app.use(express.json());
 
 app.use('/crud', mainRouter)
 
-app.listen(8001);
-console.log('Server started on port 8001');
+app.listen(3021);
+console.log('Server started on port 3021');
 
 
 
