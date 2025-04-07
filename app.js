@@ -25,7 +25,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-app.use('/api/crud', mainRouter)
+app.use('/', mainRouter)
 
 app.listen(3021);
 console.log('Server started on port 3021');
