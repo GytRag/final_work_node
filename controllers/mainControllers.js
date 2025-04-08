@@ -224,7 +224,6 @@ module.exports = {
 
     },
     allPosts: async (req, res) => {
-
         const posts = await createSchema.find()
 
         if (!posts) return res.send({message: 'error', success: false})

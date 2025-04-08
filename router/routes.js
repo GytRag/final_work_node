@@ -33,7 +33,7 @@ const {
 const userAuth = require('../middleware/userAuth');
 
 
-router.get('/allPosts',userAuth, allPosts)
+router.get('/allPosts', allPosts)
 router.get('/favorite',userAuth, favorite)
 
 router.post('/login',validateLogin, login)
