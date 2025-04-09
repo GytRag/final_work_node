@@ -6,6 +6,7 @@ const cors = require('cors');
 const mainRouter = require('./router/routes');
 const mongoose = require("mongoose");
 require("dotenv").config();
+const path = require('path');
 
 const sockets = require('./modules/sockets')
 sockets.listen(3011);
@@ -25,11 +26,17 @@ app.use(cors({
 }));
 app.use(express.json());
 
-app.use('/api/crud/', mainRouter)
-// app.use('/crud/', mainRouter)
+// app.use('/api/crud/', mainRouter)
+app.use('/crud/', mainRouter)
 
-app.listen(3021);
-console.log('Server started on port 3021');
+// Serve React App - CRUD (Frontend)
+app.use('/crud', express.static(path.join(__dirname, 'crud/build')));
+app.get('/crud/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'crud/build', 'index.html'));
+});
+
+app.listen(3022);
+console.log('Server started on port 3022');
 
 
 
