@@ -6,7 +6,6 @@ const cors = require('cors');
 const mainRouter = require('./router/routes');
 const mongoose = require("mongoose");
 require("dotenv").config();
-const path = require('path');
 
 const sockets = require('./modules/sockets')
 sockets.listen(3011);
@@ -21,13 +20,13 @@ mongoose
     })
 
 app.use(cors({
-    origin: '*', //'http://thecode.lt'
+    origin: 'https://thecode.lt',
     credentials: true
 }));
 app.use(express.json());
 
-// app.use('/api/', mainRouter)
-app.use('/', mainRouter)
+app.use('/api', mainRouter)
+// app.use('/', mainRouter)
 
 app.listen(3021);
 console.log('Server started on port 3021');
