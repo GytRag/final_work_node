@@ -26,17 +26,11 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// app.use('/api/crud/', mainRouter)
-app.use('/crud/', mainRouter)
+// app.use('/api/', mainRouter)
+app.use('/', mainRouter)
 
-// Serve React App - CRUD (Frontend)
-app.use('/crud', express.static(path.join(__dirname, 'crud/build')));
-app.get('/crud/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'crud/build', 'index.html'));
-});
-
-app.listen(3022);
-console.log('Server started on port 3022');
+app.listen(3021);
+console.log('Server started on port 3021');
 
 
 
