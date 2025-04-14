@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const sockets = require('./modules/sockets')
-sockets.listen(3011);
+sockets.listen(4011);
 
 mongoose
     .connect(process.env.MONGO_KEY)
@@ -20,16 +20,16 @@ mongoose
     })
 
 app.use(cors({
-    origin: 'https://thecode.lt',
+    origin:'*', //'https://thecode.lt'
     credentials: true
 }));
 app.use(express.json());
 
-app.use('/api', mainRouter)
-// app.use('/', mainRouter)
+// app.use('/api', mainRouter)
+app.use('/', mainRouter)
 
-app.listen(3021);
-console.log('Server started on port 3021');
+app.listen(4021);
+console.log('Server started on port 4021');
 
 
 
